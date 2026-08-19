@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Add inside <head> -->
+  <meta property="og:title" content="A note for you ❤️" />
+  <meta property="og:description" content="Click to open." />
+  <meta property="og:image" content="https://<your-github-username>.github.io/<your-repository-name>/photo1.jpg" />
+  <meta property="og:url" content="https://<your-github-username>.github.io/<your-repository-name>/" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #faf8f5;
+      --card-bg: #ffffff;
+      --text-main: #2b2825;
+      --text-muted: #736b63;
+      --accent: #9e7f66;
+      --accent-soft: #f1eae2;
+      --border: #e9e2da;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.7;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 620px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .letter-body p {
+      margin-bottom: 16px;
+      font-size: 1rem;
+      color: #423d38;
+    }
+
+    .letter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Expandable Cards Styling */
+    .note-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .note-item {
+      background: var(--accent-soft);
+      border-radius: 12px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .note-item:hover {
+      border-color: var(--accent);
+    }
+
+    .note-item .prompt {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .note-item .content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, margin-top 0.3s ease;
+      font-size: 0.92rem;
+      color: #574f47;
+    }
+
+    /* Crucial: Increased height to allow the image to reveal smoothly */
+    .note-item.open .content {
+      max-height: 480px;
+      margin-top: 14px;
+    }
+
+    .note-item .icon {
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+    }
+
+    .note-item.open .icon {
+      transform: rotate(180deg);
+    }
+
+    /* Photo Inside Card Styling */
+    .card-photo-wrapper {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .card-photo-wrapper img {
+      width: 100%;
+      height: 260px; /* Fixed height for consistency */
+      object-fit: cover; /* Cropping fix */
+      display: block;
+    }
+
+    /* Action Options */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .option-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .option-btn.selected {
+      background: var(--text-main);
+      color: #ffffff;
+      border-color: var(--text-main);
+    }
+
+    #response-box {
+      margin-top: 18px;
+      padding: 14px 18px;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Letter Section -->
+  <div class="card">
+    <h1>I'm truly sorry</h1>
+    <div class="subtitle">A note from my heart, with no expectations.</div>
+
+    <div class="letter-body">
+      <p>
+        I've been thinking about what happened non stop and I want to apologize sincerely I recognize that I hurt you,made some complications in this time and your feelings are completely VALID AND I GET IT.
+      </p>
+      <p>
+        You matter to me and i love u and i want to build this small page just to remind you that I love you, I hear you, and I want to make things right whenever you're ready
+      </p>
+      <p style="font-size: 0.8rem; line-height: 1.4; color: var(--text-muted);">
+        I LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE LOVE YOU SO MUCH
+      </p>
+      <p>
+        FUCK THE DISTANCE I WANT YOU RIGHT NOW I WANNA TALK TO YOU I FUCKING MISS YOU SO MUCH SO F.U.C.K.I.N.G MUCH
+      </p>
+    </div>
+  </div>
+
+  <!-- Reflective Reminders -->
+  <div class="card">
+    <h2 class="section-title">Things I want to remind you of</h2>
+    <div class="section-desc">CLICK ON EACH NOTE DONT FORGET.</div>
+
+    <div class="note-grid">
+
+      <!-- CARD 1: With Photo -->
+      <div class="note-item" onclick="toggleNote(this)">
+        <div class="prompt">
+          <span>YOU</span>
+          <span class="icon">▼</span>
+        </div>
+        <div class="content">
+          <!-- PHOTO IS ADDED HERE -->
+          <img src="memory.jpg" height="300" width="500" alt=""/>
+          <div class="card-photo-wrapper">
+          </div>
+          <!-- Your text -->
+          i love your presence your smile your laugh your محرشة you being there with me no matter what you make my world lighter, brighter and sunshine and lolipops
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="note-item" onclick="toggleNote(this)">
+        <div class="prompt">
+          <span>Taking full responsibility</span>
+          <span class="icon">▼</span>
+        </div>
+
+        <div class="content">
+          No excuses or anything I made a mistake and I am committed to listening and doing better and im such a خبعة still dont know what it means but ... it sounds like me i guess
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="note-item" onclick="toggleNote(this)">
+        <div class="prompt">
+          <span>im guilty</span>
+          <span class="icon">▼</span>
+        </div>
+        <div class="content">
+          i dont deserve a wholesome, hot, smart girl like you as they say الكل في الكل
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Next Step -->
+  <div class="card">
+    <h2 class="section-title">Whenever you're ready</h2>
+    <div class="section-desc">Choose whatever feels best to you right now:</div>
+
+    <div class="options-grid">
+      <button class="option-btn" onclick="selectOption(this, 'I LOVE YOU MOREEEEEE call me right now if u picked this option')">
+        <span>i forgive you zozy </span>
+        <span>→</span>
+      </button>
+      <button class="option-btn" onclick="selectOption(this, 'Take all the time you need. I won’t rush u. jk i will rush u')">
+        <span>i dont forgive u scumbag</span>
+        <span>→</span>
+      </button>
+      <button class="option-btn" onclick="selectOption(this, 'ok i guess ... sorry')">
+        <span>fuck you!</span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <div id="response-box"></div>
+  </div>
+
+  <footer>
+    Take all the time you need.
+  </footer>
+
+</div>
+
+<script>
+  function toggleNote(element) {
+    element.classList.toggle('open');
+  }
+
+  function selectOption(btn, message) {
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+
+    const resBox = document.getElementById('response-box');
+    resBox.style.display = 'block';
+    resBox.textContent = message;
+  }
+</script>
+</body>
+</html>
